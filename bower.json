@@ -1,0 +1,17 @@
+{
+  "name": "videoScroll",
+  "version": "0.0.1",
+  "homepage": "https://github.com/rbingham/videoScroll",
+  "authors": [
+    "Reese Bingham <reese.bingham@aggiemail.usu.edu>"
+  ],
+  "description": "Angular directive to play an html5 video while scrolling",
+  "main": "src/videoScroll.js",
+  "keywords": [
+    "html5",
+    "video",
+    "angular",
+    "scroll"
+  ],
+  "license": "MIT"
+}
