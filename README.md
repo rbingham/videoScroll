@@ -1,5 +1,5 @@
 # videoScroll
-[![Bower version](https://img.shields.io/badge/bower-v-green.svg)] (https://github.com/rbingham/videoScroll)
+![Bower version](https://img.shields.io/badge/bower-v0.0.2-green.svg)(https://github.com/rbingham/videoScroll)
 
 Video Scroll is an angular directive to allow for playing an html5 video while you scroll.
 
