@@ -1,12 +1,12 @@
 angular.module('videoScroll')
-.directive('playVideo', ['$window', function ($window){
+.directive('playVideo', function ($window){
         // left: 37, up: 38, right: 39, down: 40,
         // spacebar: 32, pageup: 33, pagedown: 34, end: 35, home: 36
         var keys = {37: 1, 38: 1, 39: 1, 40: 1};
 
         // raw: raw DOM element, totalTime: length of video, currentTime: current time of video
         // elementTop: distance of element from top of page, timeOffset: amount of time to adjust video when scrolling
-        var raw, totalTime, currentTime, scrollTop, timeOffset;
+        var raw, totalTime, currentTime, timeOffset, topOffset, bottomOffset, offset;
 
         currentTime = 0;
         timeOffset = .15;
@@ -104,7 +104,6 @@ angular.module('videoScroll')
 
         // prevent default key scroll events
         function preventDefaultForScrollKeys(e) {
-            console.log("here");
             if (keys[e.keyCode]) {
                 preventDefault(e);
                 scrollVideo(e);
@@ -112,35 +111,46 @@ angular.module('videoScroll')
             }
         }
 
-		function isVisible(el){
-        	el = el[0];
+        function isVisible(el){
         	var rect = el.getBoundingClientRect();
-			return (
-				rect.top >= 0 &&
-				rect.left >= 0 &&
-				rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) && /*or $(window).height() */
-				rect.right <= (window.innerWidth || document.documentElement.clientWidth) /*or $(window).width() */
-			);
+        	if(rect.top == 0 && rect.left == 0 && rect.bottom == 0 && rect.right == 0){
+        		return false;
+        	} else {
+		return (
+			rect.top + offset >= 0 &&
+			rect.left >= 0 &&
+			rect.bottom + offset <= (window.innerHeight || document.documentElement.clientHeight) && 
+			rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+		);
+        	}
         }
-
 
         return {
             restrict: 'A',
-            link: function ($scope, $element){
+            link: function ($scope, $element, $attrs){
                 raw = $element[0];      // get raw DOM element
+                if($attrs.offset){
+                	offset = Number($attrs.offset);
+                } else {
+                	offset = 0;
+                }
                 scrollTop = getTop(raw);    //  get distance from top
+                console.log(scrollTop);
+                topOffset = (scrollTop + offset);
+                bottomOffset = (scrollTop + offset) - 40;
+                console.log(topOffset, bottomOffset);
 
                 // bind function to scroll events
                 angular.element($window).bind('scroll', function (){
+                	//console.log($window.scrollY, isVisible(raw));
                     if(isNaN(totalTime)) {
                         totalTime = raw.duration; // initialize totalTime (done here because of loading issues)
-                        console.log(totalTime);
                     }
-                    // check if video is in right location
-                    if(isVisible(!$element) && $window.scrollY >= scrollTop - 225 && $window.scrollY <= scrollTop - 175){
+                    // check if video should be scrolled
+                    if(isVisible(raw) && $window.scrollY >= bottomOffset && $window.scrollY <= topOffset){
                         scrollVideo(null);
                     }
                 });
             }
         }
-    }]);
+    });
