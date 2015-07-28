@@ -6,8 +6,9 @@ angular.module('videoScroll')
 
         // raw: raw DOM element, totalTime: length of video, currentTime: current time of video
         // elementTop: distance of element from top of page, timeOffset: amount of time to adjust video when scrolling
-        var raw, totalTime, currentTime, timeOffset, topOffset, bottomOffset, offset;
+        var raw, totalTime, currentTime, timeOffset, topOffset, bottomOffset, offset, preventScroll;
 
+        preventScroll = true;
         currentTime = 0;
 
         // set time of video with scrolling
@@ -95,9 +96,11 @@ angular.module('videoScroll')
         // prevent default scroll events
         function preventDefault(e) {
             e = e || window.event;
-            if (e.preventDefault)
+            if(preventScroll){
+              if (e.preventDefault)
                 e.preventDefault();
-            e.returnValue = false;
+              e.returnValue = false;
+            }
             scrollVideo(e);
         }
 
@@ -105,8 +108,7 @@ angular.module('videoScroll')
         function preventDefaultForScrollKeys(e) {
             if (keys[e.keyCode]) {
                 preventDefault(e);
-                scrollVideo(e);
-                return false;
+                return preventScroll;
             }
         }
 
@@ -139,6 +141,8 @@ angular.module('videoScroll')
                 } else {
                   timeOffset = .15;
                 }
+
+                preventScroll = !($attrs.preventScroll && $attrs.preventScroll === 'false');
                 var scrollTop = getTop(raw);    //  get distance from top
                 topOffset = (scrollTop + offset);
                 bottomOffset = (scrollTop + offset) - 60;
