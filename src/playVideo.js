@@ -1,4 +1,4 @@
-angular.module('videoScroll')
+angular.module('nanoKeys-web')
 .directive('playVideo', function ($window){
         // left: 37, up: 38, right: 39, down: 40,
         // spacebar: 32, pageup: 33, pagedown: 34, end: 35, home: 36
@@ -9,16 +9,15 @@ angular.module('videoScroll')
         var raw, totalTime, currentTime, timeOffset, topOffset, bottomOffset, offset;
 
         currentTime = 0;
-        timeOffset = .15;
 
         // set time of video with scrolling
         function scrollVideo (e){
             if(e == null){
-                disableScroll();
-                return;
+              disableScroll();
+              return;
             }
-            if(currentTime > totalTime){
-                currentTime = totalTime;
+          if(currentTime > totalTime){
+                currentTime = totalTime - .15;
                 enableScroll();
                 return;
             }
@@ -116,13 +115,13 @@ angular.module('videoScroll')
         	if(rect.top == 0 && rect.left == 0 && rect.bottom == 0 && rect.right == 0){
         		return false;
         	} else {
-		return (
-			rect.top + offset >= 0 &&
-			rect.left >= 0 &&
-			rect.bottom + offset <= (window.innerHeight || document.documentElement.clientHeight) && 
-			rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-		);
-        	}
+            return (
+              rect.top + offset >= 0 &&
+              rect.left >= 0 &&
+              rect.bottom + offset <= (window.innerHeight || document.documentElement.clientHeight) &&
+              rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+            );
+          }
         }
 
         return {
@@ -130,19 +129,22 @@ angular.module('videoScroll')
             link: function ($scope, $element, $attrs){
                 raw = $element[0];      // get raw DOM element
                 if($attrs.offset){
-                	offset = Number($attrs.offset);
+                	offset = Number($attrs.offset) * -1;
                 } else {
                 	offset = 0;
                 }
-                scrollTop = getTop(raw);    //  get distance from top
-                console.log(scrollTop);
+
+                if($attrs.time){
+                  timeOffset = Number($attrs.time);
+                } else {
+                  timeOffset = .15;
+                }
+                var scrollTop = getTop(raw);    //  get distance from top
                 topOffset = (scrollTop + offset);
-                bottomOffset = (scrollTop + offset) - 40;
-                console.log(topOffset, bottomOffset);
+                bottomOffset = (scrollTop + offset) - 60;
 
                 // bind function to scroll events
                 angular.element($window).bind('scroll', function (){
-                	//console.log($window.scrollY, isVisible(raw));
                     if(isNaN(totalTime)) {
                         totalTime = raw.duration; // initialize totalTime (done here because of loading issues)
                     }
