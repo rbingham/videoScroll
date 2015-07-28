@@ -1,6 +1,6 @@
 # videoScroll
 
-[![Bower version](https://img.shields.io/badge/bower-v0.0.2-green.svg)](https://github.com/rbingham/videoScroll)
+[![Bower version](https://img.shields.io/badge/bower-v0.5.1-green.svg)](https://github.com/rbingham/videoScroll)
 
 Video Scroll is an angular directive to allow for playing an html5 video while you scroll.
 
@@ -10,18 +10,33 @@ Video Scroll is an angular directive to allow for playing an html5 video while y
 
 ## Code Examples
 
-Include videoScroll as a dependency of your angular module
+Include videoScroll as a dependency of your angular module.
 ```js
 angular.module('yourModule', ['videoScroll']);
 ```
 
-Add the play-video attribute to the video you want to play
+Add the play-video attribute to the video you want to play.
 ```html
 <video id="v0" tabindex="0" autobuffer="autobuffer" preload="preload" play-video>
-	<source type="video/webm; codecs=&quot;vp8, vorbis&quot;" src="videos/video.mp4">
-	<source type="video/ogg; codecs=&quot;theora, vorbis&quot;" src="videos/video.mp4">
-	<source type="video/mp4; codecs=&quot;avc1.42E01E, mp4a.40.2&quot;" src="videos/video.mp4">
-	<p>Sorry, your browser does not support the &lt;video&gt; element.</p>
+</video>
+```
+
+To change the scroll speed of the video add the time attribute.
+Note: The default time is .15 seconds.
+```html
+<video id="v0" tabindex="0" autobuffer="autobuffer" preload="preload" play-video time=".15">
+</video>
+```
+
+To change when the video starts playing relative to the top of the screen (in pixels), use the offset attribute.
+```html
+<video id="v0" tabindex="0" autobuffer="autobuffer" preload="preload" play-video offset="100">
+</video>
+```
+
+To change whether normal scrolling is disabled while the video is playing, add the preventScroll option. Default is set to true.
+```html
+<video id="v0" tabindex="0" autobuffer="autobuffer" preload="preload" play-video preventScroll="true">
 </video>
 ```
 
